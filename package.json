@@ -1,0 +1,55 @@
+{
+  "name": "monitoring_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.ts",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "build": "rimraf ./build && tsc -p ./",
+    "lint": "./node_modules/.bin/eslint --config \"./.eslintrc.js\" ./ --ext .ts",
+    "start": "nodemon",
+    "start:production": "npm run build & cross-env NODE_ENV=production node build/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "nodemonConfig": {
+    "ext": "ts",
+    "delay": "500",
+    "watch": [
+      "src/server.ts",
+      "src"
+    ],
+    "ignore": [
+      "src/**/*.test.*",
+      "src/**/*.spec.*",
+      "package-lock.json",
+      ".git",
+      "https",
+      "build",
+      "node_modules"
+    ],
+    "exec": "rimraf ./build && tsc -p ./ && node --inspect=0.0.0.0:9229 -r ts-node/register ./src/server.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "13.11.0",
+    "@typescript-eslint/eslint-plugin": "2.26.0",
+    "@typescript-eslint/parser": "2.26.0",
+    "crypto": "1.0.1",
+    "cross-env": "7.0.2",
+    "eslint": "6.8.0",
+    "eslint-config-airbnb-typescript": "7.2.0",
+    "eslint-plugin-import": "2.20.2",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "glob": "7.1.6",
+    "immutable": "4.0.0-rc.12",
+    "lodash": "4.17.15",
+    "nodemon": "2.0.2",
+    "rimraf": "3.0.2",
+    "ts-node": "8.8.1",
+    "typescript": "3.7.5"
+  }
+}

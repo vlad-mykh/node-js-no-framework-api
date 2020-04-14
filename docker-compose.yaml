@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  develop-service:
+    build: .
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3000:3000
+      - 3001:3001
+      - 9229:9229
+    command: npm run start
