@@ -2,6 +2,7 @@ import DataManager from '../../utils/dataManager';
 import { BaseRouter } from '../../models/baseRouter';
 import { User } from '../../models/user';
 import { hash } from '../../utils/helpers';
+import { verifyUserToken } from './userHelpers';
 
 /**
  * User router class.
@@ -19,7 +20,17 @@ class UserRouter extends BaseRouter {
         this.registerGet('', async (data): Promise<[number, object?]> => {
             // Checking if the provided phone number is valid.
             const phone = typeof(data.queryStringObject.phone) === 'string' && data.queryStringObject.phone.trim();
+            const token = typeof(data.headers.token) === 'string' && data.queryStringObject.phone.trim();
 
+            // Validating token
+            const isTokenValid = await verifyUserToken(token, phone);
+
+            // If token is not valid.
+            if (!isTokenValid) {
+                return [403, { Error: 'Missing required token in header, or token is invalid.',}];
+            }
+
+            // Validating request params.
             if (phone) {
                 const [user, error] = await DataManager.read('users', phone) as [User, string];
 
@@ -97,6 +108,15 @@ class UserRouter extends BaseRouter {
             const lastName = typeof(data.payload.lastName) === 'string' && data.payload.lastName.trim();
             const phone = typeof(data.payload.phone) === 'string' && data.payload.phone.trim();
             const password = typeof(data.payload.password) === 'string' && data.payload.password.trim();
+            const token = typeof(data.headers.token) === 'string' && data.queryStringObject.phone.trim();
+
+            // Validating token
+            const isTokenValid = await verifyUserToken(token, phone);
+
+            // If token is not valid.
+            if (!isTokenValid) {
+                return [403, { Error: 'Missing required token in header, or token is invalid.',}];
+            }
 
             if (phone) {
                 if (firstName || lastName || password) {
@@ -146,10 +166,19 @@ class UserRouter extends BaseRouter {
         this.registerDelete('', async (data): Promise<[number, object?]> => {
             // Getting phone number from query string.
             const phone = typeof(data.queryStringObject.phone) === 'string' && data.queryStringObject.phone.trim();
+            const token = typeof(data.headers.token) === 'string' && data.queryStringObject.phone.trim();
+
+            // Validating token
+            const isTokenValid = await verifyUserToken(token, phone);
+
+            // If token is not valid.
+            if (!isTokenValid) {
+                return [403, { Error: 'Missing required token in header, or token is invalid.',}];
+            }
 
             // Proceed only if the phone number is provided.
             if (phone) {
-                // Check
+                // Check if user exist before attempting to delete it.
                 const [userToDelete, readError] = (await DataManager.read('users', phone)) as [User, string];
 
                 // If there is no error and user exists.

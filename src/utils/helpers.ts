@@ -95,3 +95,25 @@ export const parseJsonToObject = (str: string): object => {
         return {};
     }
 };
+
+// Create a string of random alfanumeric caracters of a given length.
+export const createRandomString = (strLength: number): string => {
+    // Validating the input.
+    const length = typeof(strLength) === 'number' && strLength > 0 ? strLength : 20;
+
+    // String with all possible characters.
+    const possibleCharacters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+
+    // Resulting string.
+    let str = '';
+
+    for (let i = 0; i < length; i++) {
+        // Get a random character from the possible characters string.
+        const randomChar = possibleCharacters.charAt(Math.floor(Math.random() * possibleCharacters.length));
+
+        // Append a random character to the resulting string.
+        str+=randomChar;
+    }
+
+    return str;
+};
