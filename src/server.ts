@@ -173,7 +173,6 @@ new class Server {
             key: fs.readFileSync(path.join(__dirname, '../https/key.pem')),
             cert: fs.readFileSync(path.join(__dirname, '../https/cert.pem')),
         };
-
         
         // Instantiating the HTTPS server.
         const httpsServer = createHttpsServer(httpsServerOptions, (req: IncomingMessage, res: ServerResponse) => {
